@@ -1,0 +1,38 @@
+.fence-file-export-modal {
+	width: min(860px, 95vw);
+}
+
+.fence-file-export-modal .ffe-preview {
+	max-height: 48vh;
+	overflow: auto;
+}
+
+.fence-file-export-modal .ffe-target {
+	padding: var(--size-4-3);
+	margin-bottom: var(--size-4-3);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-m);
+	background: var(--background-secondary);
+}
+
+.fence-file-export-modal .ffe-target-path {
+	color: var(--text-accent);
+}
+
+.fence-file-export-modal .ffe-output {
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	font-family: var(--font-monospace);
+	font-size: var(--font-smaller);
+	margin-bottom: 0;
+}
+
+.fence-file-export-modal .ffe-error,
+.fence-file-export-modal .ffe-failed,
+.fence-file-export-modal .ffe-rejection {
+	color: var(--text-error);
+}
+
+.fence-file-export-modal .ffe-completed {
+	color: var(--text-success);
+}

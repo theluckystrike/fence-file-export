@@ -1,0 +1,94 @@
+[
+  {
+    "feature": "named-fences",
+    "caption": "Named backtick and tilde fences produce two target files.",
+    "note": "Recipe.md",
+    "eval": "(async () => { const p = app.plugins.plugins['fence-file-export']; for (const m of [...p.modals]) m.close();p.pro.signOut(); p.settings.folder = 'Exports'; const output = app.vault.getAbstractFileByPath('Exports'); if (output) await app.vault.delete(output, true); await p.openExport(app.workspace.getActiveFile()); return 'ok'; })()",
+    "after": "const p = app.plugins.plugins['fence-file-export']; for (const m of [...p.modals]) m.close();p.pro.signOut(); 'ok'",
+    "wait": 400,
+    "zoom": 0.85
+  },
+  {
+    "feature": "join-blocks",
+    "caption": "Two source blocks join into one output file.",
+    "note": "Joined.md",
+    "eval": "(async () => { const p = app.plugins.plugins['fence-file-export']; for (const m of [...p.modals]) m.close();p.pro.signOut(); p.settings.folder = 'Exports'; const output = app.vault.getAbstractFileByPath('Exports'); if (output) await app.vault.delete(output, true); await p.openExport(app.workspace.getActiveFile()); return 'ok'; })()",
+    "after": "const p = app.plugins.plugins['fence-file-export']; for (const m of [...p.modals]) m.close();p.pro.signOut(); 'ok'",
+    "wait": 400,
+    "zoom": 0.85
+  },
+  {
+    "feature": "preview",
+    "caption": "Review complete output text before creation.",
+    "note": "Recipe.md",
+    "eval": "(async () => { const p = app.plugins.plugins['fence-file-export']; for (const m of [...p.modals]) m.close();p.pro.signOut(); p.settings.folder = 'Exports'; const output = app.vault.getAbstractFileByPath('Exports'); if (output) await app.vault.delete(output, true); await p.openExport(app.workspace.getActiveFile()); return 'ok'; })()",
+    "after": "const p = app.plugins.plugins['fence-file-export']; for (const m of [...p.modals]) m.close();p.pro.signOut(); 'ok'",
+    "wait": 400,
+    "zoom": 0.85
+  },
+  {
+    "feature": "rejected-blocks",
+    "caption": "The preview reports traversal, hidden paths and nested fences.",
+    "note": "Rejected.md",
+    "eval": "(async () => { const p = app.plugins.plugins['fence-file-export']; for (const m of [...p.modals]) m.close();p.pro.signOut(); p.settings.folder = 'Exports'; const output = app.vault.getAbstractFileByPath('Exports'); if (output) await app.vault.delete(output, true); await p.openExport(app.workspace.getActiveFile()); return 'ok'; })()",
+    "after": "const p = app.plugins.plugins['fence-file-export']; for (const m of [...p.modals]) m.close();p.pro.signOut(); 'ok'",
+    "wait": 400,
+    "zoom": 0.85
+  },
+  {
+    "feature": "create-files",
+    "caption": "The result lists the two files that were created.",
+    "note": "Recipe.md",
+    "eval": "(async () => { const p = app.plugins.plugins['fence-file-export']; for (const m of [...p.modals]) m.close();p.pro.signOut(); p.settings.folder = 'Exports';const output = app.vault.getAbstractFileByPath('Exports'); if (output) await app.vault.delete(output, true); await p.openExport(app.workspace.getActiveFile()); await [...p.modals][0].create(); return 'ok'; })()",
+    "after": "const p = app.plugins.plugins['fence-file-export']; for (const m of [...p.modals]) m.close();p.pro.signOut(); 'ok'",
+    "wait": 400,
+    "zoom": 0.85
+  },
+  {
+    "feature": "profiles",
+    "caption": "Pro saves named output folder profiles.",
+    "note": "Recipe.md",
+    "eval": "(async () => { const p = app.plugins.plugins['fence-file-export']; for (const m of [...p.modals]) m.close();p.pro.opts.http = async () => ({ status: 200, json: { data: { viewer: { login: 'demo-reader' }, user: { sponsorshipForViewerAsSponsor: { isActive: true, isOneTimePayment: false, tier: { name: '$5 a month', monthlyPriceInCents: 500 } } } } } }); app.secretStorage.setSecret('fence-file-export-github-token', 'gho_' + '0'.repeat(36)); await p.pro.refreshNow(); p.settings.folder = 'Release files'; await p.saveProfile('Small service', 'Release files'); await p.openExport(app.workspace.getActiveFile()); const d = document.querySelector('.fence-file-export-modal select'); d.value = 'Small service'; d.dispatchEvent(new Event('change', { bubbles: true })); return 'ok'; })()",
+    "after": "const p = app.plugins.plugins['fence-file-export']; for (const m of [...p.modals]) m.close();p.pro.signOut(); 'ok'",
+    "wait": 400,
+    "zoom": 0.85
+  },
+  {
+    "feature": "export-index",
+    "caption": "Pro creates an index with links to the source and output files.",
+    "note": "Recipe.md",
+    "eval": "(async () => { const p = app.plugins.plugins['fence-file-export']; for (const m of [...p.modals]) m.close();p.pro.opts.http = async () => ({ status: 200, json: { data: { viewer: { login: 'demo-reader' }, user: { sponsorshipForViewerAsSponsor: { isActive: true, isOneTimePayment: false, tier: { name: '$5 a month', monthlyPriceInCents: 500 } } } } } }); app.secretStorage.setSecret('fence-file-export-github-token', 'gho_' + '0'.repeat(36)); await p.pro.refreshNow(); const oldIndex = app.vault.getAbstractFileByPath('Index export'); if (oldIndex) await app.vault.delete(oldIndex, true); p.settings.folder = 'Index export'; await p.openExport(app.workspace.getActiveFile()); document.querySelector('.fence-file-export-modal .checkbox-container').click(); [...p.modals][0].preview(); await [...p.modals][0].create(); for (const m of [...p.modals]) m.close(); await app.workspace.getLeaf(false).openFile(app.vault.getAbstractFileByPath('Index export/export-index.md')); return 'ok'; })()",
+    "after": "const p = app.plugins.plugins['fence-file-export']; for (const m of [...p.modals]) m.close();p.pro.signOut(); 'ok'",
+    "wait": 400,
+    "zoom": 0.85
+  },
+  {
+    "feature": "fence-file-export",
+    "caption": "Review the named blocks, create files and check rejected paths.",
+    "frames": [
+      {
+        "note": "Recipe.md",
+        "eval": "(async () => { const p = app.plugins.plugins['fence-file-export']; for (const m of [...p.modals]) m.close();p.pro.signOut(); p.settings.folder = 'Exports';const output = app.vault.getAbstractFileByPath('Exports'); if (output) await app.vault.delete(output, true); await p.openExport(app.workspace.getActiveFile()); return 'ok'; })()",
+        "hold": 1800,
+        "zoom": 0.85
+      },
+      {
+        "eval": "(async () => { const p = app.plugins.plugins['fence-file-export']; await [...p.modals][0].create(); return 'ok'; })()",
+        "hold": 1500,
+        "zoom": 0.85
+      },
+      {
+        "note": "Rejected.md",
+        "eval": "(async () => { const p = app.plugins.plugins['fence-file-export']; for (const m of [...p.modals]) m.close();p.pro.signOut(); p.settings.folder = 'Exports';p.settings.folder = 'Checked export'; await p.openExport(app.workspace.getActiveFile()); return 'ok'; })()",
+        "hold": 1800,
+        "zoom": 0.85
+      },
+      {
+        "eval": "const p = app.plugins.plugins['fence-file-export']; for (const m of [...p.modals]) m.close();'ok'",
+        "hold": 700,
+        "zoom": 0.85
+      }
+    ],
+    "zoom": 0.85
+  }
+]

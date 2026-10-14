@@ -1,0 +1,821 @@
+{
+ "slug": "fence-file-export",
+ "module": "fence-file-export",
+ "function": "planExport",
+ "cases": [
+  {
+   "name": "Backtick python body keeps LF",
+   "args": [
+    "```python file=\"main.py\"\nprint(1)\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [
+     {
+      "path": "Exports/main.py",
+      "text": "print(1)\n"
+     }
+    ],
+    "rejected": [],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Backtick python body keeps CRLF",
+   "args": [
+    "```python file=\"main.py\"\r\nprint(1)\r\n```\r\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [
+     {
+      "path": "Exports/main.py",
+      "text": "print(1)\r\n"
+     }
+    ],
+    "rejected": [],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Join the same target in note order",
+   "args": [
+    "```python file=\"main.py\"\nA\n```\n```python file=\"main.py\"\nB\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [
+     {
+      "path": "Exports/main.py",
+      "text": "A\n\nB\n"
+     }
+    ],
+    "rejected": [],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Join CRLF bodies with a CRLF separator",
+   "args": [
+    "```python file=\"main.py\"\r\nA\r\n```\r\n```python file=\"main.py\"\r\nB\r\n```\r\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [
+     {
+      "path": "Exports/main.py",
+      "text": "A\r\n\r\nB\r\n"
+     }
+    ],
+    "rejected": [],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Tilde fence with a longer closing fence",
+   "args": [
+    "~~~yaml file=\"config/app.yml\"\nport: 8080\n~~~~\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [
+     {
+      "path": "Exports/config/app.yml",
+      "text": "port: 8080\n"
+     }
+    ],
+    "rejected": [],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Skip unnamed code fences",
+   "args": [
+    "```python\nprint(1)\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [],
+    "skipped": 1,
+    "error": ""
+   }
+  },
+  {
+   "name": "An unnamed outer fence hides named text",
+   "args": [
+    "````text\n```python file=\"main.py\"\nprint(1)\n```\n````\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [],
+    "skipped": 1,
+    "error": ""
+   }
+  },
+  {
+   "name": "Reject ../private.txt",
+   "args": [
+    "```python file=\"../private.txt\"\nprint(1)\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 1,
+      "path": "../private.txt",
+      "reason": "Hidden, reserved or traversal path"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Reject /tmp/a.py",
+   "args": [
+    "```python file=\"/tmp/a.py\"\nprint(1)\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 1,
+      "path": "/tmp/a.py",
+      "reason": "Invalid relative path"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Reject C:\\a.py",
+   "args": [
+    "```python file=\"C:\\a.py\"\nprint(1)\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 1,
+      "path": "C:\\a.py",
+      "reason": "Invalid relative path"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Reject config\\a.py",
+   "args": [
+    "```python file=\"config\\a.py\"\nprint(1)\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 1,
+      "path": "config\\a.py",
+      "reason": "Invalid relative path"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Reject .secret/a.py",
+   "args": [
+    "```python file=\".secret/a.py\"\nprint(1)\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 1,
+      "path": ".secret/a.py",
+      "reason": "Hidden, reserved or traversal path"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Reject a/../b.py",
+   "args": [
+    "```python file=\"a/../b.py\"\nprint(1)\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 1,
+      "path": "a/../b.py",
+      "reason": "Hidden, reserved or traversal path"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Reject a//b.py",
+   "args": [
+    "```python file=\"a//b.py\"\nprint(1)\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 1,
+      "path": "a//b.py",
+      "reason": "Hidden, reserved or traversal path"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Reject CON.txt",
+   "args": [
+    "```python file=\"CON.txt\"\nprint(1)\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 1,
+      "path": "CON.txt",
+      "reason": "Hidden, reserved or traversal path"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Reject a.py ",
+   "args": [
+    "```python file=\"a.py \"\nprint(1)\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 1,
+      "path": "a.py ",
+      "reason": "Invalid relative path"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Reject .obsidian/config",
+   "args": [
+    "```python file=\".obsidian/config\"\nprint(1)\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 1,
+      "path": ".obsidian/config",
+      "reason": "Hidden, reserved or traversal path"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Reject the custom vault configuration folder",
+   "args": [
+    "```python file=\"config/a.py\"\nprint(1)\n```\n",
+    "Exports",
+    "config"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 1,
+      "path": "config/a.py",
+      "reason": "Vault configuration folder"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Reject an output folder in the configuration folder",
+   "args": [
+    "```python file=\"main.py\"\nprint(1)\n```\n",
+    ".obsidian/Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": ".obsidian/Exports",
+    "targets": [],
+    "rejected": [],
+    "skipped": 0,
+    "error": "Output folder: Hidden, reserved or traversal path"
+   }
+  },
+  {
+   "name": "Reject a custom configuration output folder",
+   "args": [
+    "```python file=\"main.py\"\nprint(1)\n```\n",
+    "config/Exports",
+    "config"
+   ],
+   "expected": {
+    "folder": "config/Exports",
+    "targets": [],
+    "rejected": [],
+    "skipped": 0,
+    "error": "Output folder: Vault configuration folder"
+   }
+  },
+  {
+   "name": "Reject a quoted fence in a blockquote",
+   "args": [
+    "> ```python file=\"main.py\"\n> print(1)\n> ```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 1,
+      "path": "main.py",
+      "reason": "Unsupported nested or indented fence"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Reject an indented list fence",
+   "args": [
+    "- Item\n  ```python file=\"main.py\"\n  print(1)\n  ```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 2,
+      "path": "main.py",
+      "reason": "Unsupported nested or indented fence"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Reject a fence on a list marker",
+   "args": [
+    "- ```python file=\"main.py\"\n  print(1)\n  ```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 1,
+      "path": "main.py",
+      "reason": "Unsupported nested or indented fence"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Reject an incomplete named fence",
+   "args": [
+    "```python file=\"main.py\"\nprint(1)\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 1,
+      "path": "main.py",
+      "reason": "Incomplete fence"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Single quotes are unsupported",
+   "args": [
+    "```python file='main.py'\nprint(1)\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 1,
+      "path": "",
+      "reason": "Use one quoted file=\"relative/path.ext\" attribute"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Duplicate attributes are unsupported",
+   "args": [
+    "```python file=\"main.py\" file=\"b.py\"\nprint(1)\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 1,
+      "path": "main.py",
+      "reason": "Use one quoted file=\"relative/path.ext\" attribute"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "An empty named body creates an empty file",
+   "args": [
+    "```python file=\"main.py\"\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [
+     {
+      "path": "Exports/main.py",
+      "text": ""
+     }
+    ],
+    "rejected": [],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Closing fence at EOF is accepted",
+   "args": [
+    "```text file=\"a.txt\"\nA\n```",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [
+     {
+      "path": "Exports/a.txt",
+      "text": "A\n"
+     }
+    ],
+    "rejected": [],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Wrong marker stays in body",
+   "args": [
+    "```text file=\"a.txt\"\n~~~\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [
+     {
+      "path": "Exports/a.txt",
+      "text": "~~~\n"
+     }
+    ],
+    "rejected": [],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "A shorter marker stays in body",
+   "args": [
+    "````text file=\"a.txt\"\n```\n````\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [
+     {
+      "path": "Exports/a.txt",
+      "text": "```\n"
+     }
+    ],
+    "rejected": [],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Text that resembles HTML stays as text",
+   "args": [
+    "```python file=\"index.html\"\n<script>alert(1)</script>\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [
+     {
+      "path": "Exports/index.html",
+      "text": "<script>alert(1)</script>\n"
+     }
+    ],
+    "rejected": [],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Reject a target that is another target parent",
+   "args": [
+    "```python file=\"app\"\nA\n```\n```python file=\"app/main.py\"\nB\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 0,
+      "path": "Exports/app",
+      "reason": "Targets conflict with each other"
+     },
+     {
+      "line": 0,
+      "path": "Exports/app/main.py",
+      "reason": "Targets conflict with each other"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Reject case-only target names",
+   "args": [
+    "```python file=\"a.py\"\nprint(1)\n```\n```python file=\"A.py\"\nprint(1)\n```\n",
+    "Exports",
+    ".obsidian"
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 0,
+      "path": "Exports/a.py",
+      "reason": "Targets conflict with each other"
+     },
+     {
+      "line": 0,
+      "path": "Exports/A.py",
+      "reason": "Targets conflict with each other"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Existing target is rejected",
+   "function": "preflight",
+   "args": [
+    {
+     "folder": "Exports",
+     "targets": [
+      {
+       "path": "Exports/main.py",
+       "text": "print(1)\n"
+      }
+     ],
+     "rejected": [],
+     "skipped": 0,
+     "error": ""
+    },
+    {
+     "Exports/main.py": "file"
+    }
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 0,
+      "path": "Exports/main.py",
+      "reason": "Target exists"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "Parent file is rejected",
+   "function": "preflight",
+   "args": [
+    {
+     "folder": "Exports",
+     "targets": [
+      {
+       "path": "Exports/main.py",
+       "text": "print(1)\n"
+      }
+     ],
+     "rejected": [],
+     "skipped": 0,
+     "error": ""
+    },
+    {
+     "Exports": "file"
+    }
+   ],
+   "expected": {
+    "folder": "Exports",
+    "targets": [],
+    "rejected": [
+     {
+      "line": 0,
+      "path": "Exports/main.py",
+      "reason": "Parent is a file: Exports"
+     }
+    ],
+    "skipped": 0,
+    "error": ""
+   }
+  },
+  {
+   "name": "A target appears after preview",
+   "function": "writeTargets",
+   "args": [
+    [
+     {
+      "path": "Exports/main.py",
+      "text": "print(1)\n"
+     }
+    ],
+    {
+     "Exports": "folder",
+     "Exports/main.py": "file"
+    },
+    []
+   ],
+   "expected": {
+    "completed": [],
+    "failed": [
+     {
+      "path": "Exports/main.py",
+      "reason": "Target exists"
+     }
+    ]
+   }
+  },
+  {
+   "name": "Offline writes report partial completion",
+   "function": "writeTargets",
+   "args": [
+    [
+     {
+      "path": "Exports/a.py",
+      "text": "A\n"
+     },
+     {
+      "path": "Exports/b.py",
+      "text": "B\n"
+     }
+    ],
+    {},
+    [
+     "Exports/b.py"
+    ]
+   ],
+   "expected": {
+    "completed": [
+     "Exports/a.py"
+    ],
+    "failed": [
+     {
+      "path": "Exports/b.py",
+      "reason": "Injected local write failure"
+     }
+    ]
+   }
+  },
+  {
+   "name": "Create parent folders for a new local file",
+   "function": "writeTargets",
+   "args": [
+    [
+     {
+      "path": "Exports/config/app.yml",
+      "text": "x: 1\n"
+     }
+    ],
+    {},
+    []
+   ],
+   "expected": {
+    "completed": [
+     "Exports/config/app.yml"
+    ],
+    "failed": []
+   }
+  }
+ ]
+}
