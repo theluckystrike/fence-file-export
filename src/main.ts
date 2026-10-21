@@ -5,6 +5,8 @@ import { SPONSORS, bindPro, isPro, resetPro } from './pro';
 import { DEFAULT_SETTINGS, FenceFileExportSettingTab, normalizeSettings, type FenceFileExportSettings } from './settings';
 import { ExportModal } from './modal';
 import { planExport, preflight, writeTargets, indexTarget, conflict, pathError, type Plan, type WriteResult, type VaultPort } from './export';
+import { setupHello } from './hello/index';
+import WHATS_NEW from './whats-new.json';
 
 export default class FenceFileExportPlugin extends Plugin {
 	settings: FenceFileExportSettings = { ...DEFAULT_SETTINGS, profiles: [] };
@@ -13,6 +15,8 @@ export default class FenceFileExportPlugin extends Plugin {
 	private modals = new Set<ExportModal>();
 	private unloaded = false;
 	async onload(): Promise<void> {
+		// First: "What's new" reads its state before the settings load (packages/hello). It does not wait.
+		setupHello(this, WHATS_NEW);
 		this.unloaded = false;
 		await this.loadSettings();
 		if (this.unloaded) return;

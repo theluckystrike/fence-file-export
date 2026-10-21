@@ -3,6 +3,7 @@ import { sponsorsSettingItems } from './license/github-obsidian';
 import { PRO_UI } from './pro';
 import { pathError } from './export';
 import type FenceFileExportPlugin from './main';
+import { helloSettingItems } from './hello/settings';
 
 export interface FenceFileExportSettings { folder: string; profiles: { name: string; folder: string }[] }
 export const DEFAULT_SETTINGS: FenceFileExportSettings = { folder: 'Exports', profiles: [] };
@@ -15,6 +16,11 @@ export function normalizeSettings(saved: Partial<FenceFileExportSettings> | null
 export class FenceFileExportSettingTab extends PluginSettingTab {
 	constructor(app: ConstructorParameters<typeof PluginSettingTab>[0], public plugin: FenceFileExportPlugin) { super(app, plugin); }
 	getSettingDefinitions(): SettingDefinitionItem[] {
+		// The product rows, then the "More from NoteMods" card (packages/hello).
+		return [...this.productSettingDefinitions(), ...helloSettingItems()];
+	}
+
+	productSettingDefinitions(): SettingDefinitionItem[] {
 		return [
 			{ name: 'Output folder', desc: 'Default vault folder. You can change it in the export window.', control: { type: 'text', key: 'folder', defaultValue: 'Exports' } },
 			...(this.plugin.pro ? sponsorsSettingItems(this.plugin.pro, PRO_UI) : []),

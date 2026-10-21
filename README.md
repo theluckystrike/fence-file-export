@@ -50,7 +50,9 @@ Turn on Export index to add `export-index.md` in the output folder. Its preview 
 
 ## Install
 
-This source tree is prepared for a community plugin release. For manual installation, build it or obtain the release files, then copy `main.js`, `manifest.json` and `styles.css` into `<vault>/.obsidian/plugins/fence-file-export/`. Enable Fence File Export in Community plugins. Obsidian 1.13.4 or later is required. Keep a backup of a vault before you install a new plugin.
+Open Settings, then Community plugins, then Browse, and search for "Fence File Export". Select Install, then Enable.
+
+For manual installation, build it or obtain the release files, then copy `main.js`, `manifest.json` and `styles.css` into `<vault>/.obsidian/plugins/fence-file-export/`. Enable Fence File Export in Community plugins. Obsidian 1.13.4 or later is required. Keep a backup of a vault before you install a new plugin.
 
 ## Usage
 
@@ -62,6 +64,8 @@ This source tree is prepared for a community plugin release. For manual installa
 The note stays as the source. The plugin does not overwrite output files. To export a changed version, choose a new folder or manage the previous files yourself. The command rejects source text larger than 2 MiB in UTF-8 and prepares up to 100 targets. With the index on, reserve one target for it.
 
 ## Settings
+
+After a minor or major update, this plugin opens one What's new tab in the background. The tab and settings card suggest other NoteMods plugins and Zovo Chat and link to notemods.com for feedback ([privacy](https://notemods.com/privacy/)). The tab sends no data. Turn the tab off in Settings.
 
 Output folder sets the default for the export window. The initial value is `Exports`. A completed export stores the selected folder as the next default. The Pro section includes Sponsor on GitHub, Sign in with GitHub, Refresh and Sign out. Folder profiles and the index option are in the export window. The index option starts off for each new window.
 
