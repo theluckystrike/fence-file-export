@@ -1,5 +1,11 @@
 # fence-file-export
 
+## 1.1.1
+
+### Patch Changes
+
+- Release again so that the community directory can scan it. The 1.1.0 scan could not install dependencies on the scanner side. No code change.
+
 ## 1.1.0
 
 ### Minor Changes
