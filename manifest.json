@@ -1,7 +1,7 @@
 {
 	"id": "fence-file-export",
 	"name": "Fence File Export",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"minAppVersion": "1.13.4",
 	"description": "Write named code blocks from the current note to new files in a chosen vault folder.",
 	"author": "Michael Lip",

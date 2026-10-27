@@ -1,7 +1,7 @@
 import { Notice, Plugin, TFile, TFolder } from 'obsidian';
 import type { SponsorsManager } from './license/index';
 import { createGitHubSponsors } from './license/github-obsidian';
-import { SPONSORS, bindPro, isPro, resetPro } from './pro';
+import { PRO_PROFILES, SPONSORS, bindPro, isPro, resetPro, proNotice } from './pro';
 import { DEFAULT_SETTINGS, FenceFileExportSettingTab, normalizeSettings, type FenceFileExportSettings } from './settings';
 import { ExportModal } from './modal';
 import { planExport, preflight, writeTargets, indexTarget, conflict, pathError, type Plan, type WriteResult, type VaultPort } from './export';
@@ -61,7 +61,7 @@ export default class FenceFileExportPlugin extends Plugin {
 	}
 	makePlan(source: string, folder: string): Plan { return preflight(planExport(source, folder, this.app.vault.configDir), this.vaultPort()); }
 	async saveProfile(name: string, folder: string): Promise<boolean> {
-		if (!isPro()) { new Notice('Folder profiles need pro. Sign in from the plugin settings.'); return false; }
+		if (!isPro()) { proNotice(PRO_PROFILES); return false; }
 		if (!name.trim() || name.length > 80 || pathError(folder, this.app.vault.configDir)) { new Notice('Use a profile name of 1 to 80 characters and a valid folder.'); return false; }
 		const found = this.settings.profiles.find((p) => p.name === name.trim());
 		if (!found && this.settings.profiles.length >= 20) { new Notice('The limit is 20 profiles.'); return false; }

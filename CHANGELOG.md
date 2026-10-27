@@ -1,5 +1,11 @@
 # fence-file-export
 
+## 1.1.2
+
+### Patch Changes
+
+- 7b7955f: Save profile, Export index and a saved folder profile now show how to get Pro, with a Sponsor on GitHub button, when a free user selects them.
+
 ## 1.1.1
 
 ### Patch Changes

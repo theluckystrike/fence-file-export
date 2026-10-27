@@ -59,9 +59,10 @@ describe('Review regression cases', () => {
 		modal.onOpen(); toggle.onClick(); modal.preview(); changed();
 		expect(toggle.getValue()).toBe(false);
 		pro = false; changed();
-		expect(modal.contentEl.querySelector('select')?.disabled).toBe(true);
-		expect(modal.contentEl.querySelector<HTMLButtonElement>('.ffe-save-profile')?.disabled).toBe(true);
-		expect(toggle.disabled).toBe(true);
+		// Free users can select the Pro controls: a click shows the Pro notice (tests/pro-notice.test.ts).
+		expect(modal.contentEl.querySelector('select')?.disabled).toBe(false);
+		expect(modal.contentEl.querySelector<HTMLButtonElement>('.ffe-save-profile')?.disabled).toBe(false);
+		expect(toggle.disabled).toBe(false);
 		pro = true; changed(); expect(toggle.disabled).toBe(false);
 		modal.onClose();
 	});

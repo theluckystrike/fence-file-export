@@ -1,8 +1,11 @@
 {
 	"id": "fence-file-export",
 	"name": "Fence File Export",
-	"version": "1.1.1",
-	"changes": [],
+	"version": "1.1.2",
+	"changes": [
+		"Save profile and Export index now show how to get Pro, with a Sponsor on GitHub button, when you select them.",
+		"The Save profile button and the Export index switch are no longer grey for free users. The free export does not change."
+	],
 	"tip": "Blocks with the same file name become one file. Their text joins in the order of the note.",
 	"thanks": "Hi, I am Michael, a solo developer in Poland. Fence File Export is one of over 100 small plugins that I make. Thank you for using it with your code blocks.",
 	"related": [

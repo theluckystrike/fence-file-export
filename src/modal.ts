@@ -1,5 +1,5 @@
 import { Modal, Notice, Setting, type ButtonComponent, type ToggleComponent } from 'obsidian';
-import { isPro, onProChange } from './pro';
+import { PRO_INDEX, PRO_PROFILES, isPro, onProChange, proNotice } from './pro';
 import { conflict, indexTarget, TARGET_LIMIT, type Plan } from './export';
 import type FenceFileExportPlugin from './main';
 
@@ -17,37 +17,44 @@ export class ExportModal extends Modal {
 	onOpen(): void {
 		this.setTitle('Export named code blocks'); this.modalEl.addClass('fence-file-export-modal');
 		const el = this.contentEl;
-		const proControls: { setDisabled(disabled: boolean): unknown }[] = [];
 		let indexControl: ToggleComponent;
 		el.createEl('p', { text: `Source: ${this.sourcePath}`, cls: 'ffe-source' });
 		new Setting(el).setName('Output folder').setDesc('A visible folder inside this vault. Only new files are created.').addText((t) => t.setValue(this.folder).onChange((value) => { this.folder = value; this.invalidate(); }));
 		new Setting(el).setName('Folder profiles (pro)').addDropdown((d) => {
-			proControls.push(d);
 			d.addOption('', 'Choose a saved profile');
 			for (const p of this.plugin.settings.profiles) d.addOption(p.name, p.name);
-			d.setValue(this.plugin.settings.profiles.find((p) => p.folder === this.folder)?.name ?? '');
-			d.setDisabled(!isPro()).onChange((name) => {
-				if (!isPro() || this.busy) return;
+			const current = this.plugin.settings.profiles.find((p) => p.folder === this.folder)?.name ?? '';
+			// Free users can select a saved profile: it shows what Pro adds and how to get it. The folder does not change.
+			d.setValue(current).onChange((name) => {
+				if (!isPro()) { d.setValue(current); if (name) proNotice(PRO_PROFILES); return; }
+				if (this.busy) return;
 				const profile = this.plugin.settings.profiles.find((p) => p.name === name);
 				if (profile) { this.folder = profile.folder; this.contentEl.empty(); this.stop?.(); this.onOpen(); }
 			});
 		});
 		let profileName = '';
-		new Setting(el).setName('Save folder profile (pro)').addText((t) => t.setPlaceholder('Profile name').onChange((value) => { profileName = value; })).addButton((b) => { b.buttonEl.addClass('ffe-save-profile'); b.setButtonText('Save profile').setDisabled(!isPro()).onClick(async () => {
+		new Setting(el).setName('Save folder profile (pro)').addText((t) => t.setPlaceholder('Profile name').onChange((value) => { profileName = value; })).addButton((b) => { b.buttonEl.addClass('ffe-save-profile'); b.setButtonText('Save profile').onClick(async () => {
+			// Free users can select the button: it shows what Pro adds and how to get it.
+			if (!isPro()) { proNotice(PRO_PROFILES); return; }
 			if (this.busy) return;
 			try { if (await this.plugin.saveProfile(profileName, this.folder)) new Notice('Folder profile saved. Reopen this window to select it.'); }
 			catch (error) { new Notice(`Cannot save the profile: ${String(error)}`); }
-		}); proControls.push(b); });
+		}); });
 		new Setting(el).setName('Export index (pro)').setDesc('Create export-index.md with links to the source and completed output files.').addToggle((t) => {
-			indexControl = t; proControls.push(t);
-			t.setValue(this.index).setDisabled(!isPro()).onChange((value) => { this.index = value && isPro(); this.invalidate(); });
+			indexControl = t;
+			t.setValue(this.index).onChange((value) => {
+				// Free users can turn the switch on: it shows what Pro adds and goes back to off.
+				if (value && !isPro()) { proNotice(PRO_INDEX); t.setValue(false); return; }
+				// t.setValue(false) above calls onChange(false) again. The index is already off, so the preview and Create stay.
+				if (!value && !this.index) return;
+				this.index = value && isPro(); this.invalidate();
+			});
 		});
 		new Setting(el).addButton((b) => { b.buttonEl.addClass('ffe-preview-button'); b.setButtonText('Preview').setCta().onClick(() => { if (!this.busy) this.preview(); }); }).addButton((b) => {
 			this.createButton = b; b.buttonEl.addClass('ffe-create'); b.setButtonText('Create new files').setDisabled(true).onClick(async () => { await this.create(); });
 		});
 		this.previewEl = el.createDiv({ cls: 'ffe-preview' });
 		this.stop = onProChange(() => {
-			for (const control of proControls) control.setDisabled(!isPro());
 			this.index = false; indexControl.setValue(false); this.invalidate();
 		});
 		this.preview();

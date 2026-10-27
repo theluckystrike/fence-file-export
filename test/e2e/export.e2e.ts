@@ -85,9 +85,8 @@ describe('Local file export', () => {
 			expect(await read('E2EPartial/a.txt')).toBe('A\n'); expect(await read('E2EPartial/b.txt')).toBe(null);
 		} finally { await browser.execute(() => (window as unknown as { restoreFencePort: () => void }).restoreFencePort()); }
 	});
-	it('keeps Pro controls disabled when signed out', async () => {
+	it('creates no index when signed out', async () => {
 		await open(fence('a.txt', 'A\n'), 'E2EFree');
-		expect(await browser.$('.fence-file-export-modal .ffe-save-profile').isEnabled()).toBe(false); expect(await browser.$('.fence-file-export-modal select').isEnabled()).toBe(false);
 		await create(); expect(await read('E2EFree/export-index.md')).toBe(null);
 	});
 	it('saves a folder profile and creates the previewed index with Pro', async () => {
