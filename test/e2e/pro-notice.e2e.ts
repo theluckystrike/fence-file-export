@@ -4,7 +4,7 @@ import type FenceFileExportPlugin from '../../src/main';
 
 const PROFILES_LEAD = 'Folder profiles need Pro.';
 const INDEX_LEAD = 'The export index needs Pro.';
-const PITCH = 'Sponsor on GitHub, then sign in from the plugin settings.';
+const PITCH = 'One payment turns on Pro in every NoteMods plugin. Sponsor on GitHub, then sign in from the plugin settings.';
 
 interface Shown { text: string; buttons: number }
 const notices = (): Promise<Shown[]> => browser.executeObsidian(() => [...document.querySelectorAll('.notice')].map((n) => ({ text: n.textContent ?? '', buttons: n.querySelectorAll('.pf-pro-notice-sponsor').length })));

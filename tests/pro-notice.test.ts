@@ -6,7 +6,7 @@ import { ExportModal } from '../src/modal';
 import { bindPro, resetPro } from '../src/pro';
 import manifest from '../manifest.json';
 
-const PITCH = 'Sponsor on GitHub, then sign in from the plugin settings.';
+const PITCH = 'One payment turns on Pro in every NoteMods plugin. Sponsor on GitHub, then sign in from the plugin settings.';
 
 function fakePro(pro: boolean): SponsorsManager {
 	return {
